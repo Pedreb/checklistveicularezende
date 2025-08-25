@@ -10,6 +10,14 @@ from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, Tabl
 from reportlab.lib import colors
 from reportlab.lib.colors import HexColor
 from reportlab.lib.units import inch
+import base64
+
+def get_base64_image(image_path):
+    try:
+        with open(image_path, "rb") as img_file:
+            return base64.b64encode(img_file.read()).decode()
+    except FileNotFoundError:
+        return ""
 
 # Configuração da página
 st.set_page_config(
@@ -430,10 +438,17 @@ def generate_pdf(data):
 # Interface principal
 def main():
     # Título principal
-    st.markdown("""
-    <div class="main-title">
-        <h1>🚛 CHECKLIST CAMINHÃO MUNCK</h1>
-        <p class="subtitle">Sistema de Inspeção Veicular - ID: CFR004</p>
+    # Título principal com logo
+    logo_base64 = get_base64_image("__sitelogo__Logo Rezende.png")
+
+    st.markdown(f"""
+    <div class="main-title" style="display: flex; align-items: center; text-align: left;">
+        <img src="data:image/png;base64,{logo_base64}" 
+             alt="Logo Rezende" style="height: 60px; margin-right: 2rem; filter: brightness(0) invert(1);">
+        <div style="flex: 1; text-align: center;">
+            <h1 style="margin: 0;">🚛 CHECKLIST CAMINHÃO MUNCK</h1>
+            <p class="subtitle" style="margin: 0.5rem 0 0 0;">Sistema de Inspeção Veicular - ID: CFR004</p>
+        </div>
     </div>
     """, unsafe_allow_html=True)
 
